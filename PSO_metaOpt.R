@@ -4,42 +4,39 @@
 library(metaheuristicOpt)
 
 
-#Fitness Function
-FO <- function(xx)
-{
-  ii <- c(1:length(xx))
-  sum <- sum(xx^2/4000)
-  prod <- prod(cos(xx/sqrt(ii)))
-  
-  y <- sum - prod + 1
-  return(y)
+#FUNCION OBJETIVO
+FO <- function(x){
+  dim <- length(x)
+  result <- sum(c(1:dim)*(x^4))+runif(1)
+  return(result)
 }
 
 
 
-#Parameter definition
+
+
+
+#Definición de parámetros
 Vmax <- 2
 ci <- 1.5
 cg <- 1.5
 w <- 0.7
-#Problem's lenght
 numVar <- 30
-rangeVar <- matrix(c(-600,600), nrow=2)
+rangeVar <- matrix(c(-1.28,1.28), nrow=2)
 minimos<-c()
 
 for (i in 1:30) {
-  # Optimum vector searched by PSO function 
+  # Cálculo de la solución óptima usando PSO 
   resultPSO <- PSO(FO, optimType="MIN", numVar, numPopulation=40,
                    maxIter=1000, rangeVar, Vmax, ci, cg, w)
   
-  # Optimum value obtanined evaluating the best particle in the fitness function
+  # Calcular el valor óptimo usando la función y el vector de mejor solución
   optimum.value <- FO(resultPSO)
   minimos[i] <- optimum.value
 }
 
-#Mean value of the 30 observations
+#PROMEDIO DE LOS 30 VALORES 
 mean(minimos)
-#S.D value of the 30 observations
+#D.E DE LOS 30 VALORES
 sd(minimos)
 
-print(minimos)
